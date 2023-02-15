@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "child_process": "^1.0.2",
+    "dotenv": "^16.0.3",
+    "node-dht-sensor": "^0.4.3",
+    "onoff": "^6.0.3",
+    "process": "^0.11.10"
+  }
+}
