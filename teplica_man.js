@@ -1,4 +1,4 @@
-// МАЛИНА УПРАВЛЕНИЕ managment
+// МАЛИНА УПРАВЛЕНИЕ
 
 const process=require('process');
 
@@ -16,7 +16,6 @@ var term = new blynk.WidgetTerminal(1);
 // ----- RPi Reboot Command -----
 V_PIN_0_RPI_REBOOT.on('write', function(param) {
       if (param[0] == '0') {
-         //process.exec('sudo systemctl restart blynk-start.service', function (msg) { console.log(msg) });
          exec("sudo systemctl restart blynk-start.service", (error, stdout, stderr) => {
     	    if (error) {
         	console.log(`error: ${error.message}`);
