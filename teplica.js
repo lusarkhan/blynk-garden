@@ -22,10 +22,7 @@ PIN
 РЕЛЕ К8 - ОКНО СРЕДНЯЯ
 
 */
-//require('dotenv').config()
 const process=require('process');
-
-//process.setMaxListeners(0);
 
 var Blynk = require('blynk-library');
 
@@ -122,77 +119,12 @@ const allRelaysOff = () => {
 
 allRelaysOff();
 
-/*
-var app = {
-  sensors: [
-    {
-      name: "Bolshaya",
-      type: 22,
-      pin: 4
-    },
-    {
-      name: "Srednyaya",
-      type: 22,
-      pin: 17
-    },
-    {
-      name: "Garage",
-      type: 22,
-      pin: 27 
-    }
-  ],
-  read: function() {
-    for (var sensor in this.sensors) {
-      var readout = sensorLib.read(
-        this.sensors[sensor].type,
-        this.sensors[sensor].pin
-      );
-      var readoutBig = sensorLib.read(22,dht_sensor_pin_big);
-      var readoutSred = sensorLib.read(22,dht_sensor_pin_sred);
-      var readoutGarage = sensorLib.read(22,dht_sensor_pin_garage);
-
-      if (!sensorLib.initialize(22, 4) || !sensorLib.initialize(22, 17) || !sensorLib.initialize(22, 27)) {
-    	console.warn('Failed to initialize DHT BOLSHAYA sensor');
-    	//process.exit(1);
-      }
-
-    blynk.virtualWrite(0, readoutBig.temperature.toFixed(1));
-    blynk.virtualWrite(1, readoutBig.humidity.toFixed(1));
-
-    console.log('BIG Temperature:', readoutBig.temperature.toFixed(1) + 'C');
-    console.log('BIG Humidity:   ', readoutBig.humidity.toFixed(1)    + '%');
-
-    blynk.virtualWrite(2, readoutSred.temperature.toFixed(1));
-    blynk.virtualWrite(3, readoutSred.humidity.toFixed(1));
-
-    console.log('SRED Temperature:', readoutSred.temperature.toFixed(1) + 'C');
-    console.log('SRED Humidity:   ', readoutSred.humidity.toFixed(1)    + '%');
-
-    blynk.virtualWrite(4, readoutGarage.temperature.toFixed(1));
-    blynk.virtualWrite(5, readoutGarage.humidity.toFixed(1));
-
-    console.log('GARAGE Temperature:', readoutGarage.temperature.toFixed(1) + 'C');
-    console.log('GARAGE Humidity:   ', readoutGarage.humidity.toFixed(1)    + '%');
-
-    console.log(
-        `[${this.sensors[sensor].name}] ` +
-         `temperature: ${readout.temperature.toFixed(1)}°C, ` +
-          `humidity: ${readout.humidity.toFixed(1)}%`
-      );
-    }
-    setTimeout(function() {
-      app.read();
-    }, 1000);
-  }
-};*/
-
 async function exec() {
   try {
     	if (!sensorLib.initialize(22, 4)){
     	    console.warn('BIG Failed to initialize sensor');
             blynk.setProperty(0, 'color', ERR_COLOR);
             blynk.setProperty(1, 'color', ERR_COLOR);
-            //process.exit(1);
     	} else if (!sensorLib.initialize(22, 17)) {
             console.warn('SRED Failed to initialize sensor');
             blynk.set_property(2, 'color', ERR_COLOR);
@@ -203,29 +135,21 @@ async function exec() {
             blynk.set_property(5, 'color', ERR_COLOR);
         }
 
-
     	const resBig = await sensorLib.read(22, 4);
     	const resSred = await sensorLib.read(22, 17);
-    	//const resGarage = await sensorLib.read(22, 27);
 
-    	blynk.virtualWrite(0, resBig.temperature.toFixed(1));
+      blynk.virtualWrite(0, resBig.temperature.toFixed(1));
     	blynk.virtualWrite(1, resBig.humidity.toFixed(1));
-        blynk.setProperty(0,'color', T_COLOR);
-        blynk.setProperty(1,'color', H_COLOR);
+      blynk.setProperty(0,'color', T_COLOR);
+      blynk.setProperty(1,'color', H_COLOR);
 
     	blynk.virtualWrite(2, resSred.temperature.toFixed(1));
     	blynk.virtualWrite(3, resSred.humidity.toFixed(1));
-        blynk.setProperty(2,'color', T_COLOR);
-        blynk.setProperty(3,'color', H_COLOR);
+      blynk.setProperty(2,'color', T_COLOR);
+      blynk.setProperty(3,'color', H_COLOR);
 
-    	//blynk.virtualWrite(4, resGarage.temperature.toFixed(1));
-    	//blynk.virtualWrite(5, resGarage.humidity.toFixed(1));
-        //blynk.setProperty(4,'color', T_COLOR);
-        //blynk.setProperty(5,'color', H_COLOR);
-
-        blynk.virtualWrite(15, date + "-" + month + "-" + year);
-        blynk.virtualWrite(16, hours + ":" + minutes);
-
+      blynk.virtualWrite(15, date + "-" + month + "-" + year);
+      blynk.virtualWrite(16, hours + ":" + minutes);
   } catch (err) {
     console.error("Failed to read sensor data:", err);
   }
@@ -315,8 +239,6 @@ V_PIN_14_RPI_REBOOT.on('write', function(param) {
          process.exec('sudo /sbin/shutdown -r', function (msg) { console.log(msg) });
       }
 });
-
-//app.read();
 
 blynk.on('connect', function() {
    console.log("Blynk ready."); 
